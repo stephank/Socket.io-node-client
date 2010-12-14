@@ -8,7 +8,7 @@ The `io-client.js` script that allows your client JavaScript that depends on Soc
 
 Where the client side code includes Socket.IO as follows, this *shim* will allow your client code to also run on the server without any modifications (though assuming you're able to import your code as a module in node):
 
-    var socket = new io.Socket('localhost', 8000);
+    var socket = new io.Socket('localhost', {'port': 8000});
 
     socket.on('connect', function () {
       console.log('yay, connected!');

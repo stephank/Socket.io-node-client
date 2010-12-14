@@ -1,5 +1,5 @@
 // needs to connect to a Socket.IO based server - as you'd do on the client side
-var socket = new io.Socket('localhost', 8000);
+var socket = new io.Socket('localhost', {'port': 8000});
 
 socket.on('connect', function () {
   console.log('yay, connected!');
