@@ -1,40 +1,40 @@
 (function () {
 
 var sys = require('sys'),
-    utils = require('./socket.io-node/lib/socket.io/utils'),
-    WebSocket = require('./socket.io-node/support/node-websocket-client/lib/websocket').WebSocket, 
+    utils = require('./lib/utils'),
+    WebSocket = require('websocket-client').WebSocket,
     EventEmitter = require('events').EventEmitter,
     io = {};
-    
+
+//TODO: options -> just plain 'port'
 var Socket = io.Socket = function (host, options) {
   this.url = 'ws://' + host + ':' + options.port + '/socket.io/websocket';
   this.open = false;
   this.sessionId = null;
   this._heartbeats = 0;
-  this.options = { origin: options.origin || 'http://forbind.net' };
 };
 
 Socket.prototype = new EventEmitter;
 
 Socket.prototype.connect = function () {
   var self = this;
-  
+
   function heartBeat() {
     self.send('~h~' + ++self._heartbeats);
   }
-  
-  this.conn = new WebSocket(this.url, 'borf', this.options);
-  
+
+  this.conn = new WebSocket(this.url, 'borf');
+
   this.conn.onopen = function () {
     self.open = true;
     self.emit('connect');
   };
-  
+
   this.conn.onmessage = function (event) {
-    var rawmsg = utils.decode(event.data)[0],
+    var rawmsg = utils.decode(event)[0],
         frame = rawmsg.substr(0, 3),
         msg;
-        
+
     switch (frame){
       case '~h~':
         return heartBeat();
@@ -47,7 +47,7 @@ Socket.prototype.connect = function () {
       self.emit('message', msg);
     }
   };
-  
+
   this.conn.onclose = function () {
     self.emit('disconnect');
     self.open = false;
