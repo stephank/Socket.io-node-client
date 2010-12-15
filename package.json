@@ -8,7 +8,7 @@
         "url": "http://github.com/remy/Socket.io-node-client.git"
     },
     "engine": ["node >=0.2.3"],
-    "main": "io-client",
+    "main": "lib/io-client",
     "dependencies": {
         "websocket-client": ">=0.9.5",
         "socket.io": ">=0.6.0"
